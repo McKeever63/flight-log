@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Drone Flight Log</title>
+</head>
+<body>
+  <h2>Flight Log Submission</h2>
+  <form id="flightLogForm">
+    <label>Date: <input type="date" name="date" required></label><br><br>
+    <label>Flight ID: <input type="text" name="flightId" placeholder="T25-001" required></label><br><br>
+    <label>Duration (min): <input type="number" name="duration" required></label><br><br>
+    <label>Payload (L): <input type="number" name="payload" required></label><br><br>
+    <label>Notes:<br>
+      <textarea name="notes" placeholder="95% coverage, no issues" rows="4" cols="50"></textarea>
+    </label><br><br>
+    <button type="button" onclick="saveLog()">Save Log</button>
+  </form>
+
+  <script>
+    async function saveLog() {
+      const form = document.getElementById("flightLogForm");
+      const data = {
+        date: form.date.value,
+        flightId: form.flightId.value.trim(),
+        duration: form.duration.value.trim(),
+        payload: form.payload.value.trim(),
+        notes: form.notes.value.trim(),
+        secret: "abc123"
+      };
+
+      try {
+        const response = await fetch("https://script.google.com/a/macros/precisiondronespray.ie/s/AKfycbx5IFOwRXwHnuhS6Cvhu1SzYWWaJolOu5_w5PqIlqIhNU7UKDPfdAf9TJCL6MRjob9PDA/exec", {
+          method: "POST",
+          body: JSON.stringify(data),
+          headers: { "Content-Type": "application/json" }
+        });
+
+        const result = await response.text();
+        alert(result);
+        form.reset();
+      } catch (err) {
+        alert("Failed to save log: " + err.message);
+      }
+    }
+  </script>
+</body>
+</html>
